@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #counter {
+            font-size: 3em;
+            color: #13cd06;
+            
+        }
+    </style>
+</head>
+<body>
+    <div id="counter">30</div>
+
+    <script>
+        let count = 30;
+        const counterElement = document.getElementById("counter");
+
+        const countdown = setInterval(()=>{
+            counterElement.innerHTML  = count;
+            count--;
+
+            if(count < 0){
+                clearInterval(countdown);
+                counterElement.style.color = "red";
+                counterElement.innerHTML  = "Times up buddy!!";
+            }
+        },1000);
+    </script>
+</body>
+</html>

@@ -5,8 +5,28 @@
   Once you've implemented the logic, test your code by running
 */
 
+// function countVowels(str) {
+//   let vowelCount = 0;
+//   str = str.toLowerCase();
+//   for(let i=0; i<str.length; i++){
+//     if(str[i] == 'a' || str[i] == 'e' || str[i] == 'i' || str[i] == 'o' || str[i] == 'u') vowelCount++;
+//   }
+//   return vowelCount;
+// }
+
+
+
+//another method 
 function countVowels(str) {
-    // Your code here
+  let vowelCount = 0;
+  str = str.toLowerCase();
+  const array = Array.from(str)
+  vowelCount =  array.filter((letter)=>{
+    return 'aeiou'.includes(letter)
+  }).length;
+  
+  return vowelCount;
 }
+countVowels('Coding is fun!!!')
 
 module.exports = countVowels;

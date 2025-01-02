@@ -25,20 +25,26 @@ function calculateTotalSpentByCategory(transactions) {
     }
   }
 
-  // let keys = Object.keys(spendEstimates);
-  // console.log(spendEstimates);
-  
-  
-
-  for(let key in spendEstimates){
-    let obj = {
-      category:"",
-      totalSpent: 0
-    };
-    obj.category = key;
-    obj.totalSpent = spendEstimates[key];
+  let keys = Object.keys(spendEstimates);
+  for(let i=0; i<keys.length; i++){
+    let category = keys[i];
+    let obj ={
+      category: category,
+      totalSpent: spendEstimates[category]
+    } 
     result.push(obj);
   }
+  
+
+  // for(let key in spendEstimates){
+  //   let obj = {
+  //     category:"",
+  //     totalSpent: 0
+  //   };
+  //   obj.category = key;
+  //   obj.totalSpent = spendEstimates[key];
+  //   result.push(obj);
+  // }
 
   return result;
 }

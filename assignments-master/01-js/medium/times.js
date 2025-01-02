@@ -19,7 +19,8 @@ function calculateTime(n) {
     calcSum(n);
     const afterSumDate = new Date();
     let afterSumtime = afterSumDate.getTime();
-    return afterSumtime - beforeSumtime;
+    let time =  (afterSumtime - beforeSumtime)/1000;
+    return `Time took to calculate the sum from 1 to ${n} is ${time}`;
 }
 
 // console.log(calculateTime(100));

@@ -46,7 +46,7 @@ app.get("/file/:filename",(req,res)=>{
   const fileName = __dirname +"/files/"+ req.params.filename;
   fs.readFile(fileName, "utf-8", (err,data)=>{
     if(err){
-      return res.sendStatus(404).send({
+      return res.status(404).send({
         error:"File not found"
       });
     }
@@ -54,6 +54,19 @@ app.get("/file/:filename",(req,res)=>{
   })
 })
 
+
+app.get("/*",(req,res)=>{
+  let request = req.path;
+  res.status(404).send({
+    error:`${request } is Not a valid path`
+  })
+})
+app.get("/file/*", (req,res)=>{
+  let request = req.path;
+  res.status(404).send({
+    error:`${request } is Not a valid path`
+  })
+})
 
 app.listen(port,()=>{
   console.log(`Listening to port ${port}`); 

@@ -26,47 +26,33 @@ app.get("/",(req,res)=>{
 // First part || GET /files - Returns a list of files present in `./files/` directory
 app.get("/file",(req,res)=>{
   let fileArray = [];
-  fs.readdir(__dirname + "/files", (err,files)=>{
+  fs.readdir(path.join(__dirname, './files/'), (err,files)=>{
     if(err){
-      res.send(err);
-    }else{
-      files.forEach(file=>{
-        fileArray.push(file);
-      })
+      return res.status(500).send({ error: "Could not read directory" });
     }
-    res.status(200).json({
-      msg:fileArray
-    })
+    res.json({ files });
   })  
 })
 
 
 // Second part || GET /file/:filename - Returns content of given file by name
 app.get("/file/:filename",(req,res)=>{
-  const fileName = __dirname +"/files/"+ req.params.filename;
-  fs.readFile(fileName, "utf-8", (err,data)=>{
+  const fileName = path.join(__dirname, "files", req.params.filename);
+  fs.readFile(fileName, "utf8", (err,data)=>{
     if(err){
-      return res.status(404).send({
-        error:"File not found"
-      });
+      return res.status(404).send("File not found");
     }
     res.send(data);
   })
 })
 
+app.all("*",(req,res)=>{
+  let request = req.path;
+  res.status(404).send('Route not found')
+})
 
-app.get("/*",(req,res)=>{
-  let request = req.path;
-  res.status(404).send({
-    error:`${request } is Not a valid path`
-  })
-})
-app.get("/file/*", (req,res)=>{
-  let request = req.path;
-  res.status(404).send({
-    error:`${request } is Not a valid path`
-  })
-})
+
+
 
 app.listen(port,()=>{
   console.log(`Listening to port ${port}`); 

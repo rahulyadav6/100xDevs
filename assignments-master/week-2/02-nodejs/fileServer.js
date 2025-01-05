@@ -23,6 +23,7 @@ app.get("/",(req,res)=>{
   res.send("Hello")
 })
 
+// First part || GET /files - Returns a list of files present in `./files/` directory
 app.get("/file",(req,res)=>{
   let fileArray = [];
   fs.readdir(__dirname + "/files", (err,files)=>{
@@ -38,10 +39,19 @@ app.get("/file",(req,res)=>{
     })
   })  
 })
+
+
+// Second part || GET /file/:filename - Returns content of given file by name
 app.get("/file/:filename",(req,res)=>{
-  const fileName = req.params.filename;
-  console.log(fileName);
-  res.send(fileName);
+  const fileName = __dirname +"/files/"+ req.params.filename;
+  fs.readFile(fileName, "utf-8", (err,data)=>{
+    if(err){
+      return res.sendStatus(404).send({
+        error:"File not found"
+      });
+    }
+    res.send(data);
+  })
 })
 
 

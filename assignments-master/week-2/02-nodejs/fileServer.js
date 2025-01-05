@@ -16,6 +16,38 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const app = express();
+const port = 3000;
+
+
+app.get("/",(req,res)=>{
+  res.send("Hello")
+})
+
+app.get("/file",(req,res)=>{
+  let fileArray = [];
+  fs.readdir(__dirname + "/files", (err,files)=>{
+    if(err){
+      res.send(err);
+    }else{
+      files.forEach(file=>{
+        fileArray.push(file);
+      })
+    }
+    res.status(200).json({
+      msg:fileArray
+    })
+  })  
+})
+app.get("/file/:filename",(req,res)=>{
+  const fileName = req.params.filename;
+  console.log(fileName);
+  res.send(fileName);
+})
+
+
+app.listen(port,()=>{
+  console.log(`Listening to port ${port}`); 
+})
 
 
 module.exports = app;

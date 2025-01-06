@@ -32,7 +32,7 @@ app.post("/",(req,res)=>{
         healthy:isHealthy
     })    
     res.json({
-        mag:"Done!"
+        msg:"Done!"
     })
 })
 

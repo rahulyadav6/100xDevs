@@ -75,10 +75,27 @@ app.get("/todos/:id",(req,res)=>{
       return res.json(todos[i]);
     }
   }
-  if(flag == false) res.status(400).send("Enter a valid id");
+  if(flag == false) res.status(404).send("Enter a valid id");
 })
 
-app.post("/todos")
+
+// 3 Adding a todo via postman done 
+app.post("/todos", (req, res) => {
+  let todo = req.body;
+  let id = parseInt(todo.id);
+  let title = todo.title;
+  let completed = todo.completed;
+  // const { id, title, completed } = req.body; //destructuring method
+
+  // Validate input
+  if (typeof id !== "number" || typeof title !== "string" || typeof completed !== "boolean") {
+    return res.status(400).send("Invalid todo data");
+  }
+
+  // Add the new todo
+  todos.push({ id, title, completed });
+  return res.status(201).send(`Todo added successfully with id ${id}`);
+});
 
 app.listen(port,()=>{
   console.log(`Listening to port ${port}`);

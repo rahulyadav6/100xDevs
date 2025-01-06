@@ -97,6 +97,23 @@ app.post("/todos", (req, res) => {
   return res.status(201).send(`Todo added successfully with id ${id}`);
 });
 
+
+
+// 4. PUT /todos/:id - Update an existing todo item by ID
+app.put("/todos/:id",(req,res)=>{
+  let idtoBeUpdated = parseInt(req.params.id);
+  const{id,title,completed} = req.body;
+  for(let i=0; i<todos.length; i++){
+    if(todos[i].id === idtoBeUpdated){
+      todos[i].id = id;
+      todos[i].title = title;
+      todos[i].completed = completed
+      return res.send("To do updated successfully");
+    }
+  }
+  return res.status(404).send("Not Found");
+})
+
 app.listen(port,()=>{
   console.log(`Listening to port ${port}`);
 })

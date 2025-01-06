@@ -47,7 +47,7 @@
   const port = 3000;
 
 let id = 1;
-const todos = [
+let todos = [
   {
     "id":1,
     "title":"Buy groceries",
@@ -114,6 +114,19 @@ app.put("/todos/:id",(req,res)=>{
   return res.status(404).send("Not Found");
 })
 
+app.delete("/todos/:id",(req,res)=>{
+  let todoToBeDeleted =parseInt(req.params.id);
+  todos = todos.filter((todo)=>{
+    return todo.id !== todoToBeDeleted
+  });
+  res.send(`To do with id ${todoToBeDeleted} deleted successfully`);
+})
+
+
+app.all("*",(req,res)=>{
+  let request = req.path;
+  res.status(404).send("Route not found")
+})
 app.listen(port,()=>{
   console.log(`Listening to port ${port}`);
 })

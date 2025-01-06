@@ -41,9 +41,47 @@
  */
   const express = require('express');
   const bodyParser = require('body-parser');
-  
   const app = express();
-  
   app.use(bodyParser.json());
-  
-  module.exports = app;
+
+  const port = 3000;
+
+let id = 1;
+const todos = [
+  {
+    "id":1,
+    "title":"Buy groceries",
+    "completed":true,
+  },
+  {
+    "id":2,
+    "title":"Buy books",
+    "completed":false,
+  },
+]
+
+// get all todos
+app.get("/todos",(req,res)=>{
+  res.send(todos);
+})
+
+//get todo with specific id
+app.get("/todos/:id",(req,res)=>{
+  let id = parseInt(req.params.id);
+  let flag = false;
+  for(let i=0; i<todos.length; i++){
+    if(todos[i].id === id){
+      flag = true;
+      return res.json(todos[i]);
+    }
+  }
+  if(flag == false) res.status(400).send("Enter a valid id");
+})
+
+app.post("/todos")
+
+app.listen(port,()=>{
+  console.log(`Listening to port ${port}`);
+})
+
+module.exports = app;

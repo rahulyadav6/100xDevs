@@ -51,12 +51,12 @@ let todos = [
   {
     "id":1,
     "title":"Buy groceries",
-    "completed":true,
+    "completed":true
   },
   {
     "id":2,
     "title":"Buy books",
-    "completed":false,
+    "completed":false
   },
 ]
 
@@ -88,7 +88,7 @@ app.get("/todos/:id",(req,res)=>{
 })
 
 
-// 3 Adding a todo via postman done 
+// 3 Adding a todo via postman
 app.post("/todos", (req, res) => {
   let todo = req.body;
   let id = parseInt(todo.id);
@@ -100,10 +100,16 @@ app.post("/todos", (req, res) => {
   if (typeof id !== "number" || typeof title !== "string" || typeof completed !== "boolean") {
     return res.status(400).send("Invalid todo data");
   }
-
+  if(todos.some((todo)=> todo.id === id)){
+    return res.status(409).json({ error: `Todo with id ${id} already exists` }); 
+  }
+  const newTodo = {id,title,completed};
   // Add the new todo
-  todos.push({ id, title, completed });
-  return res.status(201).send(`Todo added successfully with id ${id}`);
+  todos.push(newTodo);
+  return res.status(201).json({
+    message: "Todo added successfully",
+    todo: newTodo,
+  });
 });
 
 
@@ -124,11 +130,26 @@ app.put("/todos/:id",(req,res)=>{
 })
 
 app.delete("/todos/:id",(req,res)=>{
-  let todoToBeDeleted =parseInt(req.params.id);
-  todos = todos.filter((todo)=>{
-    return todo.id !== todoToBeDeleted
-  });
-  res.send(`To do with id ${todoToBeDeleted} deleted successfully`);
+  try{
+    let todoToBeDeleted = parseInt(req.params.id);
+    if(isNaN(todoToBeDeleted)){
+      return res.status(400).send({error:"Id must be a number"});
+    }
+    const index = todos.findIndex((todo)=>todo.id === todoToBeDeleted);
+    if(index !== -1){
+      const deletedTodo = todos.splice(index, 1)[0]; // Remove and get the deleted item
+  
+      return res.status(200).json({
+        message: `Todo with id ${todoToBeDeleted} deleted successfully`,
+        todo: deletedTodo,
+      });
+    }else{
+      res.status(404).json({error:`To do with id ${todoToBeDeleted} doesnot exist`});
+    }
+  }catch(error){
+    console.error("Error deleting todo:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 })
 
 

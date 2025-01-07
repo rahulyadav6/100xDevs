@@ -116,19 +116,30 @@ app.post("/todos", (req, res) => {
 
 // 4. PUT /todos/:id - Update an existing todo item by ID
 app.put("/todos/:id",(req,res)=>{
-  let idtoBeUpdated = parseInt(req.params.id);
-  const{id,title,completed} = req.body;
-  for(let i=0; i<todos.length; i++){
-    if(todos[i].id === idtoBeUpdated){
-      todos[i].id = id;
-      todos[i].title = title;
-      todos[i].completed = completed
-      return res.send("To do updated successfully");
+  try{
+    let idtoBeUpdated = parseInt(req.params.id);
+    if(isNaN(idtoBeUpdated)){
+      return res.status(400).send({error:"Id must be a number"}); 
     }
+    const indexToBeUpdated = todos.findIndex((todo)=>todo.id === idtoBeUpdated)
+    if(indexToBeUpdated === -1){
+      return res.status(404).json({ error: `Todo with id ${idtoBeUpdated} not found` });
+    }
+      const{id,title,completed} = req.body;
+      if(typeof(title) !== "string" || typeof completed !== "boolean"){
+        return res.status(400).json({error:"Invalid data. Title must Title must be a string and completed must be a boolean"})
+      }
+      // todos[indexToBeUpdated] = {id,title,completed};  //this is also fine but use spread operator 
+      todos[indexToBeUpdated] = { ...todos[indexToBeUpdated], title, completed };
+      return res.send("To do updated successfully");    
+  }catch(error){
+    console.error("Error updating todo:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
-  return res.status(404).send("Not Found");
 })
 
+
+// Delete a todo
 app.delete("/todos/:id",(req,res)=>{
   try{
     let todoToBeDeleted = parseInt(req.params.id);

@@ -48,7 +48,16 @@
 
 let id = 1;
 let todos = [
-  
+  {
+    "id":1,
+    "title":"Buy groceries",
+    "completed":true,
+  },
+  {
+    "id":2,
+    "title":"Buy books",
+    "completed":false,
+  },
 ]
 
 // get all todos
@@ -61,15 +70,21 @@ app.get("/todos",(req,res)=>{
 
 //get todo with specific id
 app.get("/todos/:id",(req,res)=>{
-  let id = parseInt(req.params.id);
-  let flag = false;
-  for(let i=0; i<todos.length; i++){
-    if(todos[i].id === id){
-      flag = true;
-      return res.json(todos[i]);
+  try{
+    let id = parseInt(req.params.id);
+    if(isNaN(id)){
+      return res.status(404).send({error:"Id must be a number"});
     }
+    for(let i=0; i<todos.length; i++){
+      if(todos[i].id === id){
+        return res.json(todos[i]);
+      }
+    }
+    res.status(404).send("Todo not found");
+  }catch(error){
+    console.log("Error fetching todo:",error);
+    return res.status(500).send({ error: "Internal server error" });   
   }
-  if(flag == false) res.status(404).send("Enter a valid id");
 })
 
 

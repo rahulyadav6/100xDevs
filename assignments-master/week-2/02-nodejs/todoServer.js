@@ -60,6 +60,23 @@ let todos = [
   },
 ]
 
+app.use("/",(req,res,next)=>{
+  console.log("Logged in to todo list app successfully");
+  next();
+})
+
+//middleware to handle /todos/:id route only.
+app.use("/todos/:id",(req,res,next)=>{
+  console.log("Todo with given id is listed below: ");
+  console.log(req);
+  next();
+})
+
+app.get("/",(req,res)=>{
+  res.send("Welcome to your todo list app enter /todos in address bar to see all the todos");
+})
+
+
 // get all todos
 app.get("/todos",(req,res)=>{
   if(!todos || todos.length === 0){

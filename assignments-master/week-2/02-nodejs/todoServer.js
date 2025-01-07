@@ -48,20 +48,14 @@
 
 let id = 1;
 let todos = [
-  {
-    "id":1,
-    "title":"Buy groceries",
-    "completed":true,
-  },
-  {
-    "id":2,
-    "title":"Buy books",
-    "completed":false,
-  },
+  
 ]
 
 // get all todos
 app.get("/todos",(req,res)=>{
+  if(!todos || todos.length === 0){
+    return res.status(404).send({error:"No todos found"});
+  }
   res.send(todos);
 })
 

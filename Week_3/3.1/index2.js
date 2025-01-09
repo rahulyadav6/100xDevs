@@ -3,9 +3,6 @@ const app = express();
 const port = 3000;
 
 
-// This is the ugly way of doing authentication if we have to authenticate again in aonther route we will have to write all the authentication logic again so we will use middlewares which is demonstrated in next file i,e index2.js
-
-
 // This middleware will count the number of times my server is hit
 let numberOfRequests = 0;
 function calculateRequest(req,res,next){

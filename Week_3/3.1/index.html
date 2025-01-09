@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // const URL = "https://fakerapi.it/api/v1/persons"
+        async function getAnimalData(){
+            const response = await fetch("https://fakerapi.it/api/v1/persons");
+            const finalData = await response.json();
+            const dataArr = finalData.data;
+            for(let i=0; i<10; i++){
+                console.log(dataArr[i].email);
+            }
+            
+        }
+    </script>
+    <button onclick="getAnimalData()">Get Animal Data</button>
+</body>
+</html>

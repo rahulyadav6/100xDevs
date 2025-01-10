@@ -57,6 +57,26 @@ app.post("/signup", async(req,res)=>{
     }
 });
 
+app.get("/users", async(req,res)=>{
+    try{
+        const autorization = req.headers.authorization;
+        if(!autorization){
+            return res.status(401).json({ error: "Authorization header is missing" });
+        }
+        const loggedInUser = jwt.verify(autorization,JWT_SECRET);
+        if(!loggedIn){
+            return res.status(401).json({ error: "Invalid token" });
+        }
+
+        // Find all users except the logged in user
+        const users = await user.find({email: {$ne: loggedInUser.username}});
+        res.status(200).json(users);
+    }catch(err){
+        console.error("Error fetching users:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+
+})
 
 
 async function startServer(){

@@ -64,7 +64,7 @@ app.get("/users", async(req,res)=>{
             return res.status(401).json({ error: "Authorization header is missing" });
         }
         const loggedInUser = jwt.verify(autorization,JWT_SECRET);
-        if(!loggedIn){
+        if(!loggedInUser){
             return res.status(401).json({ error: "Invalid token" });
         }
 

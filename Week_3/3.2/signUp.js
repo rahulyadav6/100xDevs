@@ -78,6 +78,34 @@ app.get("/users", async(req,res)=>{
 
 })
 
+app.delete("/", async (req,res)=>{
+    try{
+        const autorization = req.headers.authorization;
+        if(!autorization){
+            return res.status(401).json({ error: "Authorization header is missing" });
+        }
+        const loggedInUser = jwt.verify(autorization,JWT_SECRET);
+        if(!loggedInUser){
+            return res.status(401).json({ error: "Invalid token" });
+        }
+
+        // i want to delete the user whose authorization key is sent.
+        const userId = loggedInUser.username;
+        console.log(userId);
+        const deletedUser = await user.deleteOne({emai:userId, email:{$ne: loggedInUser.username }});
+
+        if(deletedUser.deletedCount === 0) {
+            return res.status(404).json({ error:"User not found or cannot delete the logged-in user"});
+        }
+        res.status(200).json({ message: "User deleted successfully", user: deletedUser });
+        
+
+    }catch(err){
+        console.error("Error fetching users:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
+
 
 async function startServer(){
     await connectToDatabase(); // connect to dabase first even before server starts

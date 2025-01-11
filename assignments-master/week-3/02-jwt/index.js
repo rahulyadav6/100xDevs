@@ -40,6 +40,12 @@ function signJwt(username, password){
  */
 function verifyJwt(token) {
     // Your code here
+    try{
+        jwt.verify(token,jwtPassword)
+        return true;
+    }catch(err){
+    }
+    return false;
 }
 
 /**
@@ -51,6 +57,7 @@ function verifyJwt(token) {
  */
 function decodeJwt(token) {
     // Your code here
+    return jwt.decode(token);
 }
 
 

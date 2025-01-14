@@ -16,6 +16,15 @@ function findIndex(todos , id){
     return -1;
 }
 
+// Function to delete todo at any particular index;
+function removeAtIndex(todos, idx){
+    let newArray = [];
+    for(let i=0; i<todos.length; i++){
+        if(i != idx) newArray.push(todos[i]);
+    }
+    return newArray;
+}
+
 // Get method to get all todos
 app.get("/todos",(req,res)=>{
     fs.readFile("todos.json","utf-8",(err,data)=>{
@@ -117,6 +126,30 @@ app.put("/todos/:id",(req,res)=>{
     })
 })
 
+app.delete("/todos/:id",(req,res,next)=>{
+    const id = parseInt(req.params.id);
+    fs.readFile("todos.json", "utf-8", (err,data)=>{
+        if(err){
+            return next(err);
+        }
+        try{
+            let todos = JSON.parse(data);
+            const todoIndex = findIndex(todos,id);
+            if(todoIndex === -1){
+                return res.status(404).json({erro:`Cannot delete: Todo with ${id} doesn't exist`})
+            }
+            todos = removeAtIndex(todos, todoIndex);
+            fs.writeFile("todos.json", JSON.stringify(todos),(err)=>{
+                if(err){
+                    return next(err);
+                }
+                return res.status(200).json({msg:`Todo with id ${id} deleted succcessfully`});
+            })
+        }catch(parseError){
+            return next(parseError);
+        }
+    })
+})
 
 
 app.get("/",(req,res)=>{

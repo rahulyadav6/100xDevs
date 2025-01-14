@@ -35,14 +35,18 @@ app.post("/todos",(req,res,next)=>{
         if(err){
             return next(err);
         }
-        const todos = JSON.parse(data);
-        todos.push(newTodo);
-        fs.writeFile("todos.json", JSON.stringify(todos), (err)=>{
-            if(err){
-                return next(err);
-            }
-            res.status(200).json(newTodo);
-        })
+        try{
+            const todos = JSON.parse(data);
+            todos.push(newTodo);
+            fs.writeFile("todos.json", JSON.stringify(todos), (err)=>{
+                if(err){
+                    return next(err);
+                }
+                res.status(200).json(newTodo);
+            });
+        }catch(parseError){
+            return next(parseError);
+        }
     })
 })
 

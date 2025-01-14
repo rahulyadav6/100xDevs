@@ -51,7 +51,35 @@ app.post("/todos",(req,res,next)=>{
 })
 
 
-// app.
+app.get("/todos/:id",(req,res,next)=>{
+    function findIndex(todos , id){
+        for(let i=0; i<todos.length; i++){
+            if(todos[i].id == id){
+                return i;
+            }
+        }
+        return -1;
+    }
+    const id =parseInt(req.params.id);
+    if(isNaN(id)){
+        return res.status(400).json({error:"id is not a valid number"});
+    }
+        fs.readFile("todos.json", "utf-8", (err,data)=>{
+            if(err){
+                return res.status(404).json({error:"File not found"});
+            }
+            try{
+                const todos = JSON.parse(data);
+                const todoIndex = findIndex(todos,id);
+                if(todoIndex == -1){
+                    return res.status(404).json({error:`To with id ${id} doesn't exist`});
+                }
+                return res.status(200).json({todo:todos[todoIndex]});
+            }catch(parseError){
+                return next(parseError); // Handle JSON parsing errors
+            }
+        })
+})
 
 
 

@@ -51,6 +51,9 @@ app.post("/todos",(req,res,next)=>{
 })
 
 
+// app.
+
+
 
 app.get("/",(req,res)=>{
     res.sendFile(path.join(__dirname) + "/index.html");
@@ -63,6 +66,12 @@ app.use((err,req,res,next)=>{
         error:"Server error"
     })
 })
+
+// for all other routes, return 404
+app.get("*",(req,res)=>{
+    res.status(404).json({error:"path is not defined"});
+})
+
 app.listen(port,()=>{
     console.log(`Listening to port ${port}`);
 })

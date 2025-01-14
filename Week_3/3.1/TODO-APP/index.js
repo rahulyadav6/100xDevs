@@ -6,6 +6,15 @@ const app = express();
 
 app.use(express.json());
 
+// Function to find the index of particular todos given the id.
+function findIndex(todos , id){
+    for(let i=0; i<todos.length; i++){
+        if(todos[i].id == id){
+            return i;
+        }
+    }
+    return -1;
+}
 
 // Get method to get all todos
 app.get("/todos",(req,res)=>{
@@ -52,14 +61,6 @@ app.post("/todos",(req,res,next)=>{
 
 
 app.get("/todos/:id",(req,res,next)=>{
-    function findIndex(todos , id){
-        for(let i=0; i<todos.length; i++){
-            if(todos[i].id == id){
-                return i;
-            }
-        }
-        return -1;
-    }
     const id =parseInt(req.params.id);
     if(isNaN(id)){
         return res.status(400).json({error:"id is not a valid number"});
@@ -79,6 +80,41 @@ app.get("/todos/:id",(req,res,next)=>{
                 return next(parseError); // Handle JSON parsing errors
             }
         })
+})
+
+
+app.put("/todos/:id",(req,res)=>{
+    const id = parseInt(req.params.id);
+    if(isNaN(id)){
+        return res.status(404).json({error:"Not a valid id"});
+    }
+    fs.readFile("todos.json", "utf-8", (err,data)=>{
+        if(err){
+            return res.status(404).json({error: "Cannot read file"});
+        }
+        const todos = JSON.parse(data);
+        const todoIndex = findIndex(todos, id);
+        if(todoIndex == -1){
+            return res.status(404).json({error:`Todo with ${id} doesn't exist`});
+        }else{
+            const updatedTodo = {
+                id: todos[todoIndex].id,
+                title: req.body.title,
+                description: req.body.description
+            };
+            todos[todoIndex] = updatedTodo;
+            fs.writeFile("todos.json", JSON.stringify(todos), (err)=>{
+                if(err){
+                    return res.status(404).json({error:"Couldn't write to file"});
+                }
+                todos
+                return res.status(200).json({
+                    msg:"Todo updated successfully",
+                    todo:updatedTodo
+                })
+            })
+        }
+    })
 })
 
 

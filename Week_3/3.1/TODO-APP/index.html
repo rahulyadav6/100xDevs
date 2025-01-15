@@ -28,6 +28,8 @@
             let parentElement = document.getElementById("mainArea");
             for(let i=0; i<todos.length; i++){
                 let childElement = document.createElement("div");
+                childElement.id = todos[i].id;
+
                 let grandChildElement1 = document.createElement("span");
                 grandChildElement1.innerHTML = todos[i].title;
 
@@ -45,45 +47,43 @@
                 parentElement.appendChild(childElement);
             }
         }
-        onLoad();
-
-
-        function deleteDone(){
-            console.log("Delete done");
-            // document.removeChild()
-            
-        }
-        function deleteTodo(id){
-            fetch("http://localhost:3000/todos/" + id,{
+        async function deleteTodo(id){
+            const response =  await fetch("http://localhost:3000/todos/" + id,{
                 method:"DELETE",
-                body: JSON.stringify({
-                    title:title,
-                    description:description
-                }),
                 headers:{
                     "Content-Type": "application/json"
                 }
-            }).then(deleteDone)
+            })
+            if(response.ok){
+                const todoElement = document.getElementById(id);
+                if(todoElement){
+                    todoElement.remove();
+                }
+            }else{
+                console.error("Failed to delete the todo");
+            }
         }
 
         function parsedResponse(data){
             let parentElement = document.getElementById("mainArea")
-                let childElement = document.createElement("div");
-                let grandChildElement1 = document.createElement("span");
-                grandChildElement1.innerHTML = data.title;
-
-                let grandChildElement2 = document.createElement("span");
-                grandChildElement2.innerHTML = data.description;
-
-                let grandChildElement3 = document.createElement("button");
-                grandChildElement3.innerHTML = "Delete";
-                grandChildElement3.setAttribute("onClick","deleteTodo(" + data.id + ")");
-
-                childElement.appendChild(grandChildElement1);
-                childElement.appendChild(grandChildElement2);
-                childElement.appendChild(grandChildElement3);
-
-                parentElement.appendChild(childElement);
+            let childElement = document.createElement("div");
+            childElement.id = data.id;
+            
+            let grandChildElement1 = document.createElement("span");
+            grandChildElement1.innerHTML = data.title;
+            
+            let grandChildElement2 = document.createElement("span");
+            grandChildElement2.innerHTML = data.description;
+            
+            let grandChildElement3 = document.createElement("button");
+            grandChildElement3.innerHTML = "Delete";
+            grandChildElement3.setAttribute("onClick","deleteTodo(" + data.id + ")");
+            
+            childElement.appendChild(grandChildElement1);
+            childElement.appendChild(grandChildElement2);
+            childElement.appendChild(grandChildElement3);
+            
+            parentElement.appendChild(childElement);
         }
         function callback(res){
             res.json().then(parsedResponse);
@@ -102,6 +102,7 @@
                 }
             }).then(callback)
         }
-    </script>
+        onLoad();
+        </script>
 </body>
 </html>

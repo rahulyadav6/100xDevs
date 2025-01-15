@@ -70,6 +70,19 @@ app.put("/admin/courses/:id", adminAuthentication, (req,res)=>{
     }
 })
 
+app.get("/admin/courses", adminAuthentication, (req,res)=>{
+    res.json({courses: COURSES});
+})
+
+app.get("/admin/courses/:id", adminAuthentication, (req,res)=>{
+    const id = parseInt(req.params.id);
+    const course = COURSES.find(c => c.id === id);
+    if(!course){
+        return res.status(404).json({error:"Invalid course ID"});
+    }
+    return res.json({c:course})
+})
+
 app.listen(port,()=>{
     console.log(`Listening to port ${port}`);
     

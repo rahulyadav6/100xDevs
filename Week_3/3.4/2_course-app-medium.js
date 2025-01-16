@@ -12,9 +12,13 @@ let COURSES = [];
 
 const secretkey = "tops3cr3t";
 
+// const validTokens = new Set();
+
 const generateJwt = (user)=>{
     const payload = {username: user.username};
-    return jwt.sign(payload, secretkey, {expiresIn: '1h'});
+    const token =  jwt.sign(payload, secretkey, {expiresIn: '1h'});
+    // validTokens.add(token);
+    return token;
 }
 
 // Middleware to authenticate admin
@@ -32,6 +36,7 @@ const adminAuthentication = (req,res,next)=>{
 // Middleware to authenticate user
 const userAuthentication = (req,res,next)=>{
     const {username, password} = req.headers;
+    
     const user = USERS.find(u=> u.username === username && u.password === password);
     if(!user){
         return res.status(400).json({error:"User Authentication failed "});
@@ -47,6 +52,9 @@ const authenticateJwt = (req,res,next)=>{
 
     if(authHeader){
         const token = authHeader.split(" ")[1];
+        // if(!validTokens.has(token)){
+        //     return res.status(403).json({ error: "Token is invalid" });
+        // }
         jwt.verify(token, secretkey, (err,user)=>{
             if(err){
                 return res.sendStatus(403);
@@ -87,7 +95,6 @@ app.post("/admin/login", adminAuthentication, (req,res)=>{
 // Admin course adding route
 app.post("/admin/courses", authenticateJwt, (req,res)=>{
     const user = req.user.username;
-    console.log(user);
     const course = req.body;
     course.id = COURSES.length + 1;
     if(! course.title){
@@ -136,7 +143,81 @@ app.get("/admin/courses/:id", authenticateJwt, (req,res)=>{
 })
 
 
+/*  -->     User logics goes here  -->    */
 
+
+// User signup route
+app.post("/users/signup", (req,res)=>{
+    const user = {...req.body, purchasedCourses:[]};
+    // const user = {
+    //     username: req.body.username,
+    //     password: req.body.password,
+    //     purchsedCourses:[]
+    // }
+    const existingUser = USERS.find(u=>u.username === user.username)
+    if(existingUser){
+        res.status(403).json({error:"User already exists"});
+    }else{
+        USERS.push(user);
+        const token = generateJwt(user);
+        res.json({message:"User created successfully", token});
+    }
+})
+
+//  User login route
+app.post("/users/login", userAuthentication, (req,res)=>{
+    const user = req.user;
+    if(user){
+        const token = generateJwt(user);
+        res.json({message:`Welcome ${req.user.username} You are logged in`,token})
+    }else{
+        console.log("Inside route");
+        res.status(403).json({message:"User authentication failed"});
+    }
+})
+
+// Route to see the user profile 
+app.get("/profile", userAuthentication,(req,res)=>{
+    const user = req.user;
+    res.json({
+        message: `Welcome, ${user.username}!`,
+        purchasedCourses: user.purchasedCourses
+    });
+})
+
+app.get("/users/courses", authenticateJwt, (req,res)=>{
+    // const user = req.user.username;
+    res.json({ courses: COURSES.filter(c=> c.published) });
+})
+
+app.post("/users/courses/:id", authenticateJwt, (req,res)=>{
+    const username = req.user.username;
+    const user = USERS.find((u) => u.username === username);
+    const courseId = parseInt(req.params.id);
+    const course = COURSES.find(c=> c.id === courseId && c.published);
+    if(course){
+        user.purchasedCourses.push(courseId);
+        res.json({msg:`Hey ${user.username}, Your have successfully purchased course with id ${courseId}`});
+    }else{
+        res.status(404).json({error:"Course not found or not available"});
+    }
+})
+
+app.get("/users/purchasedCourses", authenticateJwt, (req,res)=>{
+    // const purchasedCourses = COURSES.filter(c=> req.user.purchasedCourses.includes(c.id));
+    // the above one line does the same thing as below lines does 
+
+    const username = req.user.username;
+    const user = USERS.find((u)=>u.username === username);
+    let purchasedCourseIds = user.purchasedCourses
+    let purchasedCourses = [];
+    for(let i=0; i<COURSES.length; i++){
+        if(purchasedCourseIds.indexOf(COURSES[i].id) !== -1){
+            purchasedCourses.push(COURSES[i]);
+        }
+    }
+    res.json({purchasedCourses});
+})
 
 
 

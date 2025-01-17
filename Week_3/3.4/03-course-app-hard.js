@@ -141,7 +141,29 @@ app.get('/admin/courses/:courseId', authenticateJwt, async(req,res)=>{
 
 
 // User routes
+app.post('/users/signup', async(req,res)=>{
+    const { username, password } = req.body;
+    const user = await User.findOne( {username});
+    if(user){
+        return res.status(404).json({error:`${username} already exist `});
+    }else{
+        const newUser = new User({username, password});
+        await newUser.save();
+        const token = jwt.sign({username, role: 'user'}, secret, {expiresIn:'1h'});
+        res.json({message:"User created successfulyy", token}); 
+    }
+})
 
+app.post('/users/login', async(req,res)=>{
+    const { username, password } = req.headers;
+    const user = await User.findOne({username, password});
+    if(!user){
+        res.status(404).json({error:`User doesnot exits`});
+    }else{
+        const token = jwt.sign({username, role: 'user'}, secret, {expiresIn: '1h'});
+        res.json({message:`Logged in successfully as ${username}`, token});
+    }
+})
 
 // Make connection to database and start the server
 async function startServer(){

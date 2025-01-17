@@ -165,6 +165,43 @@ app.post('/users/login', async(req,res)=>{
     }
 })
 
+app.get('/users/courses', authenticateJwt, async(req,res)=>{
+    try{
+        const courses = await Course.find({published:true});
+        // const courses = await Course.find({price:10000000000});
+        if(courses.length == 0){
+            return res.json({message:"You have not purchased any course"});
+        }
+        return res.json({courses});
+    }catch(err){
+        res.status(505).json({error:`Server error `});
+    }
+    
+})
+
+
+// user purchase a course route
+app.post('/users/courses/:courseId', authenticateJwt, async(req,res)=>{
+    const courseId = req.params.courseId;
+    const userName = req.user.username;
+    try{
+        const user = await User.findOne({username: userName});
+        const course = await Course.findById(courseId);
+        if(!course){
+            return res.status(404).json({error:`Course with id ${courseId} is not available`});
+        }
+        if(user.purchasedCourses.includes(courseId)){
+            return res.status(400).json({ message: "Course already purchased" });
+        }
+
+        user.purchasedCourses.push(courseId);
+        await user.save();
+        return res.json({message:`Cousrse purchased successfully`});
+    }catch(err){
+        res.status(505).json({error:`Server error`});
+    }
+})
+
 // Make connection to database and start the server
 async function startServer(){
     await connectToDatabase(); // connect even before the server starts

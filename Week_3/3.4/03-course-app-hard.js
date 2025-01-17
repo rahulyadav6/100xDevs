@@ -27,3 +27,47 @@ const courseSchema = new mongoose.Schema({
     imageLink: String,
     published: Boolean
 })
+
+// Define mongoose model
+const User = mongoose.model('User',userSchema);
+const Admin = mongoose.model("Admin", adminSchema);
+const Course = mongoose.model('Course',courseSchema);
+
+// Function to make database connection 
+async function connectToDatabase(req,res,next){
+    try{
+        await mongoose.connect("mongodb+srv://admin:u4aAj4xkj2QZfoap@cluster0.npomqzy.mongodb.net/Courses");
+        console.log("Connected to database");
+    }catch(err){
+        console.log("Error connecting to database");
+        process.exit(1);
+    }
+}
+
+// Jwt authentication 
+const authenticateJwt = (req,res,next)=>{
+    const authHeader = req.headers.authorization;
+    if(authHeader){
+        const token = authHeader.split(' ')[1];
+        jwt.verify(token,secret,(err,user)=>{
+            if(err){
+                return res.sendStatus(403);
+            }
+            req.user = user;
+            next();
+        });
+    }else{
+        res.sendStatus(401);
+    }
+}
+
+
+
+// Make connection to database and start the server
+async function startServer(){
+    await connectToDatabase(); // connect even before the server starts
+    app.listen(3000,()=>{
+        console.log("Listening to port 3000");
+    })
+}
+startServer();

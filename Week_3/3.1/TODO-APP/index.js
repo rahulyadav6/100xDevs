@@ -5,7 +5,7 @@ const path = require("path");
 const port = 3000;
 const app = express();
 
-app.use(express.json());
+app.use(express.json());c
 
 // Function to find the index of particular todos given the id.
 function findIndex(todos , id){

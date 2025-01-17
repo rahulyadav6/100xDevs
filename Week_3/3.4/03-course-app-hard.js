@@ -89,7 +89,20 @@ app.post('/admin/login', async(req,res)=>{
     }
 });
 
-
+// Admin course post route
+app.post('/admin/courses', authenticateJwt, async(req,res)=>{
+    const adminUsername = req.user.username;
+    const adminName = adminUsername.split('@')[0];
+    const course = new Course(req.body);
+    const title = course.title;
+    const description = course.description;
+    const isAvailable = await Course.findOne({title, description});
+    if(isAvailable){
+        return res.status(403).json({error:`Course with same title and description already exists`});
+    }
+    await course.save();
+    res.json({message: `Hey ${adminName} you have successfully created a course`, courseId: course.id }) 
+} )
 
 
 // Make connection to database and start the server

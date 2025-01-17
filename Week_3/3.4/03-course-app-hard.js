@@ -12,7 +12,7 @@ const secret = "sup3rsecr3t";
 const userSchema = new mongoose.Schema({
     username:String,
     password:String,
-    purchasedCourses: [{type: mongoose.Schema.Types.ObjectId, ref: 'courses'}]
+    purchasedCourses: [{type: mongoose.Schema.Types.ObjectId, ref: 'Course'}]
 });
 
 const adminSchema = new mongoose.Schema({
@@ -198,7 +198,23 @@ app.post('/users/courses/:courseId', authenticateJwt, async(req,res)=>{
         await user.save();
         return res.json({message:`Cousrse purchased successfully`});
     }catch(err){
+        console.error("Error purchasing course:", err);
         res.status(505).json({error:`Server error`});
+    }
+})
+
+// route to send purchsed courses by user
+app.get('/users/purchasedCourses', authenticateJwt, async(req,res)=>{
+    const username = req.user.username;
+    try{
+        const user = await User.findOne({username}).populate('purchasedCourses');
+        if(!user){
+            return res.status(403).json({error:"User not found"});
+        }
+        return res.json({purchasedCourses: user.purchasedCourses || []});
+    }catch(err){
+        console.error("Error fetching purchased courses:", err);
+        res.status(500).json({error:`Server error`});
     }
 })
 

@@ -61,6 +61,33 @@ const authenticateJwt = (req,res,next)=>{
     }
 }
 
+// Admin routes 
+
+// Admin sign up
+app.post('/admin/signup', async(req,res)=>{
+    const { username, password } = req.body;
+    const admin = await Admin.findOne({username});
+    if(admin){
+        res.status(403).json({message:'Admin already exists'});
+    }else{
+        const newAdmin = new Admin({username, password});
+        await newAdmin.save();
+        const token = jwt.sign({username, role : 'admin'}, secret, {expiresIn: '1h'} )
+        res.json({message:'Admin created successfully',token});
+    }
+})
+
+// Admin log in route
+app.post('/admin/login', async(req,res)=>{
+    const { username, password } = req.headers;
+    const admin = await Admin.findOne({ username, password });
+    if(admin){
+        const token = jwt.sign({ username, role: 'admin' }, secret, {expiresIn: '1h'} );
+        res.json({message: 'Logged in successfully ', token});
+    }else{
+        res.status(403).json({message: 'Please signup first '});
+    }
+});
 
 
 // Make connection to database and start the server

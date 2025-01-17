@@ -105,6 +105,19 @@ app.post('/admin/courses', authenticateJwt, async(req,res)=>{
 } )
 
 
+// Admin course update route 
+app.put('/admin/courses/:courseId', authenticateJwt, async(req,res)=>{
+    const id = req.params.courseId;
+    console.log(id);
+    const course = await Course.findByIdAndUpdate(id,req.body, {new: true});  // new: true: Returns the updated document instead of the original.
+    if(course){
+        return res.json({message:`Course updated successfully`, course});
+    }else{
+        return res.status(403).json({error:`Course with id ${id} not found`});
+    }
+
+})
+
 // Make connection to database and start the server
 async function startServer(){
     await connectToDatabase(); // connect even before the server starts

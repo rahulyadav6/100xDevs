@@ -118,6 +118,31 @@ app.put('/admin/courses/:courseId', authenticateJwt, async(req,res)=>{
 
 })
 
+// admin trying to get all courses route
+app.get('/admin/courses', authenticateJwt, async(req,res)=>{
+    const courses = await Course.find({});
+    res.json({courses});
+})
+
+// Admin trying to get a particular course with id 
+app.get('/admin/courses/:courseId', authenticateJwt, async(req,res)=>{
+    const courseId = req.params.courseId;
+    try{
+        const course = await Course.findById(courseId);
+        if(!course){
+            return res.status(404).json({error: "Course not found "});
+        }
+        return res.json({course});
+    }catch(err){
+        return res.status(404).json({error:`Invaliddddd courseId`});
+    }
+})
+
+
+
+// User routes
+
+
 // Make connection to database and start the server
 async function startServer(){
     await connectToDatabase(); // connect even before the server starts

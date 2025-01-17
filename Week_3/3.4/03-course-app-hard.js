@@ -12,7 +12,7 @@ const secret = "sup3rsecr3t";
 const userSchema = new mongoose.Schema({
     username:String,
     password:String,
-    purchasedCourses: [{type: mongoose.Schema.Types.ObjectId, ref: 'Course'}]
+    purchasedCourses: [{type: mongoose.Schema.Types.ObjectId, ref: 'courses'}]
 });
 
 const adminSchema = new mongoose.Schema({
@@ -36,7 +36,7 @@ const Course = mongoose.model('Course',courseSchema);
 // Function to make database connection 
 async function connectToDatabase(req,res,next){
     try{
-        await mongoose.connect("mongodb+srv://admin:u4aAj4xkj2QZfoap@cluster0.npomqzy.mongodb.net/Courses");
+        await mongoose.connect("mongodb+srv://admin:u4aAj4xkj2QZfoap@cluster0.npomqzy.mongodb.net/courses");
         console.log("Connected to database");
     }catch(err){
         console.log("Error connecting to database");
@@ -88,6 +88,8 @@ app.post('/admin/login', async(req,res)=>{
         res.status(403).json({message: 'Please signup first '});
     }
 });
+
+
 
 
 // Make connection to database and start the server

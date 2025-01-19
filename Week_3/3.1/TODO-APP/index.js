@@ -1,11 +1,13 @@
 const express = require("express");
 const fs = require("fs");
+const cors = require("cors");
 const path = require("path");
 
 const port = 3000;
 const app = express();
 
-app.use(express.json());c
+app.use(express.json());
+app.use(cors());
 
 // Function to find the index of particular todos given the id.
 function findIndex(todos , id){
@@ -37,7 +39,7 @@ app.get("/todos",(req,res)=>{
 })
 
 // Post method to post a todo
-
+let idx = 0;
 app.post("/todos",(req,res,next)=>{
     const newTodo = {
         id: Math.floor(Math.random() * 1000000), // unique random id;

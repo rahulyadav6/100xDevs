@@ -7,11 +7,23 @@ export function Todos({todos}){
     }
     return(
         <div>
-            {todos.map((todo,index)=>{
-                return <div key={index}>
+            {todos.map((todo)=>{
+                return <div key={todo._id}>
                 <h1>{todo.title}</h1>
                 <h2>{todo.description}</h2>
-                <button>{todo.completed == true? "completed": "Mark as completed "}</button>
+                <button
+                    onClick={async()=>{
+                    await fetch("http://localhost:3000/completed",{
+                        method: "PUT",
+                        body:JSON.stringify({
+                            id: todo._id,
+                        }),
+                        headers:{
+                            "Content-type":"application/json"
+                        }
+                    })
+                    }}
+                >{todo.completed == true? "completed": "Mark as completed "}</button>
                 </div>
             })}
         </div>

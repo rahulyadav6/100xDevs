@@ -1,31 +1,34 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react'
-import React from 'react';
+// import { useState } from 'react'
+// import React from 'react';
 import './App.css'
 
 function App() {
-  const [title, settitle] = useState("Rahul");
-  return (
+  return(
     <div>
-      <button onClick={()=>{
-        settitle(Math.random());
-      }}>Click me to change the title</button>
-      <Header title={title} />
-      <Header title={"Kaushal"} />
-      <Header title={"Kaushal"} />
-      <Header title={"Kaushal"} />
-      <Header title={"Kaushal"} />
-      <Header title={"Kaushal"} />
-      <Header title={"Kaushal"} />
+      <CardWrapper>
+        hi there
+      </CardWrapper>
     </div>
-  )
+  );
 }
 
-const Header = React.memo(function Header({ title }){
+
+function CardWrapper({children}){
   return(
-      <div>
-          {`My name is ${title}`}
-      </div>
+    <div style={{border: "2px solid black", padding:20}}>
+    {children}
+    </div>
   );
-})
+}
+
+
+
+// const Header = React.memo(function Header({ title }){
+//   return(
+//       <div>
+//           {`My name is ${title}`}
+//       </div>
+//   );
+// })
 export default App

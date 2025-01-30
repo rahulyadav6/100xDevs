@@ -40,4 +40,23 @@ router.post("/signup", async(req,res)=>{
     })
 })
 
+router.post("/signin", async(req,res)=>{
+    const body = req.body;
+    const user = await User.findOne({
+        username: body.username,
+        password: body.password
+    })
+    if(!user){
+        res.status(404).json({
+            error:"Invaid username or password"
+        })
+    }
+    const token = jwt.sign({userId: user._id}, JWT_SECRET, {expiresIn: "1h"});
+res.status(202).json({
+    message:"Logged in successfully",
+    token: token
+})
+
+})
+
 module.exports = router;

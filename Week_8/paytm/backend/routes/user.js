@@ -14,8 +14,8 @@ router.get("/", (req, res) => {
 const signupSchema = zod.object({
   username: zod.string().email(),
   password: zod.string(),
-  firstname: zod.string(),
-  lastname: zod.string(),
+  firstName: zod.string(),
+  lastName: zod.string(),
 });
 router.post("/signup", async (req, res) => {
   try {
@@ -24,6 +24,8 @@ router.post("/signup", async (req, res) => {
     console.log("Received Body:", body); // Debugging
 
     const { success } = signupSchema.safeParse(body);
+    console.log(success)
+
     if (!success) {
       return res.status(400).json({ message: "Invalid input format" });
     }
@@ -115,31 +117,35 @@ router.put("/", authMiddleware, async (req, res) => {
 });
 
 router.get("/bulk", async (req, res) => {
-  const filter = req.query.filter || "";
+  try {
+    const filter = req.query.filter?.trim() || "";
 
-  const users = await User.find({
-    $or: [
-      {
-        firstName: {
-          $regex: filter,
-        },
-      },
-      {
-        lastName: {
-          $regex: filter,
-        },
-      },
-    ],
-  });
+    let users;
+    if (filter === "") {
+      // If filter is empty, return all users
+      users = await User.find();
+    } else {
+      users = await User.find({
+        $or: [
+          { firstName: { $regex: filter, $options: "i" } }, // Case-insensitive search
+          { lastName: { $regex: filter, $options: "i" } }
+        ]
+      });
+    }
 
-  res.json({
-    user: users.map((user) => ({
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      _id: user._id,
-    })),
-  });
+    res.json({
+      users: users.map(user => ({
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        _id: user._id
+      }))
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
+
 
 module.exports = router;

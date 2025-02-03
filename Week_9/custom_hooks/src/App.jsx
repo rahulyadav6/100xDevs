@@ -31,7 +31,7 @@ function useTodos(n){
 }
 
 function App() {
-  const {isOnline, isOffline, error} = useIsOnline();
+  const { isOffline} = useIsOnline();
   const { todos, loading } = useTodos(5);
   console.log('re-rendered'); // why this is not getting printed on console 
   if(loading){

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, Outlet } from 'react-router-dom'
 
 function App() {
   return (
@@ -10,14 +10,24 @@ function App() {
         |
         <Link to="/neet/online-coaching-class-12">Class 12</Link>
         <Routes>
+          <Route path="/" element={<Layout/>}>
           <Route path='/neet/online-coaching-class-11' element={<Class11Program />} />
           <Route path='/neet/online-coaching-class-12' element={<Class12Program />} />
-          <Route path="/" element={<Landing />} />
+          <Route index element={<Landing />} />
           <Route path="*" element={<NotFound />} />
-        </Routes>
+          </Route>
+        </Routes> 
       </BrowserRouter>
     </>
   )
+}
+
+function Layout(){
+  return <div>
+    Header
+    <Outlet/>
+    Footer
+  </div>
 }
 
 function Landing(){

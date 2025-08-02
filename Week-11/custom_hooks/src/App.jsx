@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState } from 'react'
-import { useFetch } from './hooks/useFetch';
+import { useFetch, usePostTitle } from './hooks/useFetch';
 import './App.css'
 
 
@@ -16,11 +16,23 @@ function useCounter(){
 }
 function App() {
   const {count, increaseCount} = useCounter();
-  const posttitle = useFetch();
+  const posttitle = usePostTitle();
+  const { data, loading } = useFetch("https://jsonplaceholder.typicode.com/posts/13");
+
+  if(loading){
+    return <div>
+      Loading.......
+    </div>
+  }
   return (
     <>
       <button onClick={increaseCount}>Increase {count}</button>
+      <br></br>
+      <br></br>
       {posttitle}
+      <br></br>
+      <br></br>
+      {JSON.stringify(data)}
     </>
   )
 }

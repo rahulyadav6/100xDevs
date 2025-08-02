@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 
-export function useFetch(){
+export function usePostTitle(){
     const[post, setPost] = useState({});
 
     async function getPosts(){
@@ -14,4 +14,22 @@ export function useFetch(){
     }, [])
 
     return post.title;
+}
+
+export function useFetch(url){
+    const [data, setData] = useState({});
+    const [loading, setLoading] = useState(true);
+    async function getData(){
+        setLoading(true);
+        const response = await fetch(url);
+        const json = await response.json();
+        setData(json);
+        setLoading(false);
+    }
+
+    useEffect(()=>{
+        getData();
+    }, [url])
+
+    return {data,loading};
 }

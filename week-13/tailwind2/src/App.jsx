@@ -1,5 +1,7 @@
 import './App.css'
 import Button from './components/Button'
+import Input from './components/Input'
+import Otp from './components/Otp'
 import Webinar from './Webinar'
 
 function App() {
@@ -7,7 +9,10 @@ function App() {
   return (
     <div className='h-screen bg-blue-700'>
       {/* <Webinar/> */}
-      <Button disabled={true} >Sign Up</Button>
+      {/* <Input type="text" placeholder={"Username"} ></Input>
+      <Button disabled={true} >Sign Up</Button> */}
+
+      <Otp/>
     </div>
   )
 }

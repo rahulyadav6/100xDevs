@@ -1,4 +1,9 @@
-/* @import "tailwindcss";
+@import "tailwindcss";
+
 @theme {
-  --color-blue-700: #10b981;
-} */
+  colors: {
+    blue: {
+      700: "#002b5b"
+    }
+  }
+}

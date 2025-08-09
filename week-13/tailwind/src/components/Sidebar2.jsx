@@ -40,11 +40,11 @@ function Sidebar2() {
                 </div>
             </div>
 
-            <div className="p-2">
+            {/* <div className="p-2">
                 <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
                     hi there
                 </div>
-            </div>
+            </div> */}
         </div>
 
     </div>

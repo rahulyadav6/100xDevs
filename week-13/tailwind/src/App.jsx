@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react'
 import './App.css'
 import MainContent from './components/MainContent'
@@ -9,9 +10,9 @@ function App() {
 
   return (
     <div className='flex'>
-      {/* <Sidebar sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} />
-      <MainContent sideBarOpen={sideBarOpen} /> */}
+      {/* <Sidebar sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} /> */}
       <Sidebar2/>
+      <MainContent sideBarOpen={sideBarOpen} />
     </div>
   )
 }

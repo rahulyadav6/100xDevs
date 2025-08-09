@@ -1,9 +1,1 @@
 @import "tailwindcss";
-
-@theme {
-  colors: {
-    blue: {
-      700: "#002b5b"
-    }
-  }
-}

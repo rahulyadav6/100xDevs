@@ -43,10 +43,14 @@ app.post("/signin", function(req,res){
 });
 app.get("/users", function(req,res){
     const token = req.headers.authorization;
+    console.log(token);
+    
     try{
         const decoded = jwt.verify(token, jwtPassword);
         const username = decoded.username;
-        ALL_USERS.map()
+        res.json({
+            users:ALL_USERS.filter((user) => user.username !== username)
+        })
     }catch(err){
         return res.status(403).json({
             msg:"Invalid token",

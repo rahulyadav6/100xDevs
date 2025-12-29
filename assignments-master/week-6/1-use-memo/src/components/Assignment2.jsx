@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-key */
 import React, { useEffect, useMemo, useState } from "react";
 
 // In this assignment, you will create a component that renders a large list of sentences and includes an input field for filtering these items. 

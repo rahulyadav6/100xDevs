@@ -35,6 +35,11 @@ const Assignment4 = () => {
                     onChange={(e)=>{
                         setInputVal(e.target.value);
                     }}
+                    onKeyDown={(e)=>{
+                        if(e.key === "Enter"){
+                            generateParagraph();
+                        }
+                    }}
                 />
                 <button className='bg-black text-white text-xl p-3 rounded-2xl cursor-pointer'
                 onClick={generateParagraph}

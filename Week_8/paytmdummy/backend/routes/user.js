@@ -1,17 +1,104 @@
 const express = require("express");
-
+const zod = require("zod");
+const  User  = require("../models/user");
 const router = express.Router();
+const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const { authMiddleware } = require("../middleware");
 
+const signupSchema = zod.object({
+    username:zod.string().email(),
+    password: zod.string(),
+    firstname: zod.string(),
+    lastname: zod.string()
+})
 router.get("/", (req,res)=>{
     res.json({
         msg:"Hello from user routed"
     })
 })
-router.post("/signup", (req,res) =>{
-    const { username, password, firstname, lastname} = req.body;
-    console.log(username);
+router.post("/signup", async(req,res) =>{
+    const body = req.body;
+    const result = signupSchema.safeParse(body);
+    
+    if(!result.success){
+        return res.status(400).json({ message: "Invalid input format" });
+    }
+    
+    
+    const existingUser = await User.findOne({ username: result.data.username });
+    if(existingUser){
+        return res.status(400).json({
+            msg:"Email already exists"
+        })
+    }
+
+    const user = await User.create(result.data);
+    // console.log("User Created", user);
+    const userId = user._id;
+    const token = jwt.sign({ userId },process.env.jwt_SECRET);
     res.json({
-        msg:`Hey ${firstname} we welcome you to paytm`
-    })  
+        msg:`User created successfully`,
+        token: token,
+    })
 })
+
+router.post("/signin", async(req,res)=>{
+    const body = req.body;
+    const user = await User.findOne({ username: body.username, password: body.password });
+    if(!user){
+        return res.status(403).json({
+            message:"Username or password is incorrect",
+        })
+    }
+    const token = jwt.sign({userId: user._id}, process.env.jwt_SECRET);
+    return res.status(200).json({
+        message:"Logged in successfully",
+        token: token,
+    })
+})
+
+const updateBody = zod.object({
+    password: zod.string().optional(),
+    firstname: zod.string().optional(),
+    lastname: zod.string().optional(),
+});
+
+router.put("/", authMiddleware, async(req,res)=>{
+    const { success, data } = updateBody.safeParse(req.body);
+    if(!success){
+        return res.status(403).json({
+            message: "Invalid data format",
+        })
+    }
+    try{
+        const updatedUser = await User.updateOne(
+           { _id: req.userId},
+           {$set: data}
+        )
+        console.log(updatedUser);
+        if(updatedUser.matchedCount === 0){
+            return res.status(403).json({
+                message:"No user found",
+            })
+        }
+        if(updatedUser.modifiedCount === 0){
+            return res.status(200).json({
+                message:"No changes made (same data)",
+            })
+        }
+        return res.status(200).json({
+            msg:"User updated successfully"
+        })
+        
+    }catch(err){
+        console.error("Error updating user:", error);
+        res.status(500).json({
+        message: "Internal server error",
+    });
+    }
+})  
+
+
+
 module.exports = router;

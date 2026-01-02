@@ -21,7 +21,7 @@ router.post("/signup", async (req, res) => {
   try {
     const body = req.body;
 
-    console.log("Received Body:", body); // Debugging
+    // console.log("Received Body:", body); // Debugging
 
     const { success } = signupSchema.safeParse(body);
     console.log(success)

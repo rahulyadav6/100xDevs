@@ -1,60 +1,24 @@
-/* eslint-disable react/jsx-key */
-/* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react'
-import './App.css'
-import axios from "axios"
-import { useIsOnline } from 'react-use-is-online';
+import  { useEffect  } from 'react'
 
-
-/* Custom hook */
-function useTodos(n){
-  const [todos, setTodos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(()=>{
-    const value = setInterval(() => {
-      axios.get("https://dummyjson.com/todos")
-      .then(res =>{
-        setTodos(res.data.todos);
-        setLoading(false);
-      })  
-    }, n * 1000);
-    axios.get("https://dummyjson.com/todos")
-    .then(res =>{
-      setTodos(res.data.todos);
-      setLoading(false);
-    })  
-
-    clearInterval(value);
-
-  },[n])
-  return { todos, loading };
-}
-
-function App() {
-  const { isOffline} = useIsOnline();
-  const { todos, loading } = useTodos(5);
-  console.log('re-rendered'); // why this is not getting printed on console 
-  if(loading){
-    return <div>loading...</div>
-  }
-  if(isOffline){
-    return <div>You are offline</div>
-  }
+const App = () => {
+  
   return (
     <>
-      {todos.map(todo => <Track key={todo.id} todo={todo} />)}
+      <MyComponent/>
     </>
   )
 }
 
-function Track({ todo }){
-  return(
-    <div>
-      {todo.todo}
-      <br/>
-      {todo.userId}
-    </div>
-  );
+function MyComponent(){
+  useEffect(()=>{
+    console.log("Component mounted");
+    return()=>{
+      console.log("component unmounted");
+    }
+  },[])
+  return <div>
+    From inside my component
+  </div>
 }
 
 export default App

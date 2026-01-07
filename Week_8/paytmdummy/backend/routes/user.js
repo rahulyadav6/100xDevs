@@ -69,7 +69,6 @@ const updateBody = zod.object({
     firstname: zod.string().optional(),
     lastname: zod.string().optional(),
 });
-
 router.put("/", authMiddleware, async(req,res)=>{
     const { success, data } = updateBody.safeParse(req.body);
     if(!success){
@@ -103,7 +102,7 @@ router.put("/", authMiddleware, async(req,res)=>{
         message: "Internal server error",
     });
     }
-})  
+})
 
 router.get("/bulk", authMiddleware, async(req,res)=>{
     try{

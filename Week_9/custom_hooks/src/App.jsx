@@ -26,7 +26,27 @@ function useTodos(n) {
   
   return { todos, loading };
 }
+// function useInterval(cb, timeout){
+//   useEffect(()=>{
+//     setInterval(()=>{
+//       cb();
+//     },timeout)
+//   },[])
+// }
 
+function useDebounce(value,timeout){
+  const [debouncedValue, setdebouncedValue] = useState(value);
+  useEffect(()=>{
+    let timeoutNumber = setTimeout(()=>{
+      setdebouncedValue(value);
+    },timeout)
+
+    return()=>{
+      clearInterval(timeoutNumber);
+    }
+  },[value])
+  return debouncedValue;
+}
 const App = () => {
   // const [render, setRender] = useState(true);
   // useEffect(()=>{

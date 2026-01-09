@@ -27,19 +27,53 @@
 
 /* ---------------------------- interfaces -------------------------- */
 
-interface User{
-    firstName:string,
-    lastName: string,
-    age: number,
-    email?:string // email is optional
+// interface User{
+//     firstName:string,
+//     lastName: string,
+//     age: number,
+//     email?:string // email is optional
+// }
+
+// function isLegal(user: User){
+//     user.age > 18 ? true: false
+// }
+
+// isLegal({
+//     firstName:"Rahul",
+//     lastName:"Yadav",
+//     age:22
+// })
+
+
+/* --------------- class, interface and objects ----------------- */
+// interface Person{
+//     name:string,
+//     age: number
+// }
+// class Employee implements Person {
+//     name: string;
+//     age: number;
+//     constructor(n:string, a:number){
+//         this.name = n;
+//         this.age = a;
+//     }
+//     greet(phrase: string){
+//         console.log(`${phrase} ${this.name}`);
+        
+//     }
+// }
+
+// let ram = new Employee("Ram", 22);
+// console.log(ram.name);
+
+
+
+/* ------------Either stirng or number ------------ */
+
+type GreetArg = number | string
+function greet(id: GreetArg){ 
+    console.log(id);   
 }
 
-function isLegal(user: User){
-    user.age > 18 ? true: false
-}
-
-isLegal({
-    firstName:"Rahul",
-    lastName:"Yadav",
-    age:22
-})
+greet(1);
+greet("Rahul");

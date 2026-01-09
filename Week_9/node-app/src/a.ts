@@ -70,10 +70,37 @@
 
 /* ------------Either stirng or number ------------ */
 
-type GreetArg = number | string
-function greet(id: GreetArg){ 
-    console.log(id);   
+// type GreetArg = number | string
+// function greet(id: GreetArg){ 
+//     console.log(id);   
+// }
+
+// greet(1);
+// greet("Rahul");
+
+/* --------Arrays in TS ------------ */
+
+// function maxValue(arr: number[]): number{
+//     let max = arr[0] as number;
+//     for(const value of arr){
+//         if(value > max){
+//             max = value
+//         }
+//     }
+//     return max;
+// }
+
+// maxValue([1,2,3]);
+
+
+
+/* ---------------generics --------------------- */
+function identity<T>(arg:T){
+    return arg;
 }
 
-greet(1);
-greet("Rahul");
+let output1 = identity<string>("Hello world");
+let output2 = identity<number>(12345);
+console.log(output1);
+console.log(output2);
+

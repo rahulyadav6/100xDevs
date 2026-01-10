@@ -3,7 +3,7 @@ import './App.css'
 function App() {
   return (
     <>
-      <Todo title='Code' description='Write some code' done={false} />
+      <Todo title='Code' description='Write alot of code' done={false} />
     </>
   )
 }

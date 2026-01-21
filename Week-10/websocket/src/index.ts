@@ -13,3 +13,16 @@ const wss = new WebSocketServer({ port: 8080 });
 //     })
 // })
 
+
+/* echo application using websocket */
+wss.on("connection", function(socket){
+    console.log("User connected");
+    socket.on("message", (e)=>{
+        console.log(e.toString());
+        
+        if(e.toString() === "ping"){
+            socket.send("pong");
+        }
+    })
+    
+})

@@ -7,14 +7,14 @@ wss.on("connection", (socket) => {
         //@ts-ignore
         const parsedMessage = JSON.parse(message);
         if (parsedMessage.type === "join") {
-            console.log(`User joined room ${parsedMessage.payload.roomId}`); //debugging
+            // console.log(`User joined room ${parsedMessage.payload.roomId}`); //debugging
             clients.push({
                 socket,
                 room: parsedMessage.payload.roomId
             });
         }
         if (parsedMessage.type === "chat") {
-            console.log(`User wants to chat`); //debugging
+            // console.log(`User wants to chat`); //debugging
             let currentUserRoom = null;
             for (let i = 0; i < clients.length; i++) {
                 if (clients[i]?.socket == socket) {

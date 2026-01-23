@@ -31,14 +31,33 @@
 
 // interfaces
 
-interface UserType{
-    name:string;
-    age:number;
+// interface UserType{
+//     name:string;
+//     age:number;
+// }
+// function greet(user:UserType){ 
+//     console.log(`Hello ${user.name} Your age is ${user.age}`);
+// }
+
+// greet({name:"Rahul",age:24})
+
+
+//type in typescript
+
+interface Manager{
+    name:string,
+    age:number
 }
-function greet(user:UserType){ 
-    console.log(`Hello ${user.name} Your age is ${user.age}`);
+interface Employee{
+    name:string,
+    department:string
 }
 
-greet({name:"Rahul",age:24})
+type TeamLead = Manager & Employee
 
-console.log("hello");
+let t: TeamLead = {
+    name:"Rahul",
+    age:23,
+    department:"Scinece"
+}
+console.log(t);

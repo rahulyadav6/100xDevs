@@ -17,12 +17,26 @@
 
 
 // Assignment 3 function that takes another funciton as input and runs it after 1sec
-function higherOrderFunction(fn: ()=>void){
-    setTimeout(fn,2000)
+// function higherOrderFunction(fn: ()=>void){
+//     setTimeout(fn,2000)
+// }
+
+// function print(){
+//     console.log("Hello ji");
+// }
+
+// higherOrderFunction(print);
+
+
+
+// interfaces
+
+interface UserType{
+    name:string;
+    age:number;
+}
+function greet(user:UserType){ 
+    console.log(`Hello ${user.name} Your age is ${user.age}`);
 }
 
-function print(){
-    console.log("Hello ji");
-}
-
-higherOrderFunction(print);
+greet({name:"Rahul",age:23})

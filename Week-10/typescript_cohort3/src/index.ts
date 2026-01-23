@@ -39,4 +39,6 @@ function greet(user:UserType){
     console.log(`Hello ${user.name} Your age is ${user.age}`);
 }
 
-greet({name:"Rahul",age:23})
+greet({name:"Rahul",age:24})
+
+console.log("hello");

@@ -17,7 +17,7 @@
 
 
 // Assignment 3 function that takes another funciton as input and runs it after 1sec
-function hof(fn: ()=>void){
+function higherOrderFunction(fn: ()=>void){
     setTimeout(fn,2000)
 }
 
@@ -25,4 +25,4 @@ function print(){
     console.log("Hello ji");
 }
 
-hof(print);
+higherOrderFunction(print);

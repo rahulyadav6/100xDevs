@@ -99,27 +99,69 @@
 // }
 
 // unions and intersections in type
-type Employee = {
-    name:string;
-    startDate:string;
-}
-type Manager = {
-    name:string;
-    department:string
-}
-type TeamLead = Employee & Manager;
+// type Employee = {
+//     name:string;
+//     startDate:string;
+// }
+// type Manager = {
+//     name:string;
+//     department:string
+// }
+// type TeamLead = Employee & Manager;
 
-let e:Employee = {
-    name:"rahul",
-    startDate:"01-02,2004"
+// let e:Employee = {
+//     name:"rahul",
+//     startDate:"01-02,2004"
+// }
+
+// let m:Manager = {
+//     name:"ak",
+//     department:"development"
+// }
+// let t:TeamLead = {
+//     name:"harkirat",
+//     startDate:"02,01,2000",
+//     department:"development"
+// }
+
+
+// type User = {
+//     name:string;
+//     age:number;
+// }
+// type Admin = {
+//     name:string;
+//     permissions:string;
+// }
+
+// type UserOrAdmin = User | Admin
+
+// function greet(user: UserOrAdmin){
+//     console.log(user.name);
+// }
+
+
+
+
+
+
+
+
+// given the interfae write a function that takes array of users as input and return legal users age > 18
+
+interface User{
+    firstName:string;
+    lastName:string;
+    age:number
 }
 
-let m:Manager = {
-    name:"ak",
-    department:"development"
+function legal(users:User[]){
+    let legalUser = [];
+    for(const user of users){
+        if(user.age > 18) legalUser.push(user.firstName);
+    }
+    return legalUser;
 }
-let t:TeamLead = {
-    name:"harkirat",
-    startDate:"02,01,2000",
-    department:"development"
-}
+
+let legalUsers = legal([{firstName:"rahul", lastName:"yadav", age:20},{firstName:"kaushal", lastName:"thakur", age:23},{firstName:"dhiraj", lastName:"kamti", age:12},{firstName:"rites", lastName:"yadav", age:5}]);
+console.log(legalUsers);

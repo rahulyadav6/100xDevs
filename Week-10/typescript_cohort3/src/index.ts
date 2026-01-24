@@ -154,7 +154,6 @@ interface User{
     lastName:string;
     age:number
 }
-
 function legal(users:User[]){
     let legalUser = [];
     for(const user of users){

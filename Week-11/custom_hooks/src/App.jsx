@@ -5,7 +5,7 @@ import './App.css'
 
 
 function useCounter(){
-  const [count, setCount] = useState(0);
+  const [ count, setCount ] = useState(0);
   function increaseCount(){
     setCount(count+1);
   }
@@ -21,7 +21,7 @@ function App() {
 
   if(loading){
     return <div>
-      Loading.......
+      Loading....
     </div>
   }
   return (

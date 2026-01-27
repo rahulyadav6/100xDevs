@@ -8,7 +8,7 @@ app.post('/', async(c) => {
   console.log(c.req.header("Authorization"));
   console.log(c.req.query("param"));
 
-  return c.text("Hello Hono from index.ts!");
+  return c.text("Hello Hono!");
 })
 
 export default app

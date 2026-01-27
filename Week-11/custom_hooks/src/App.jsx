@@ -15,7 +15,7 @@ function useCounter(){
   }
 }
 function App() {
-  const {count, increaseCount} = useCounter();
+  const { count, increaseCount} = useCounter();
   const posttitle = usePostTitle();
   const { data, loading } = useFetch("https://jsonplaceholder.typicode.com/posts/13");
 

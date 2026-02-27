@@ -25,9 +25,9 @@ export default function Accord() {
             <main className="w-125 p-4">
                 <div>
                     <div>Accord page</div>
-                    {faqs.map((faq) => {
+                    {faqs.map((faq, index) => {
                         return (
-                            <Accordion type="single" collapsible defaultValue="item-1">
+                            <Accordion key={index} type="single" collapsible defaultValue="item-1">
                                 <AccordionItem value="item-1">
                                     <AccordionTrigger>{faq.question}</AccordionTrigger>
                                     <AccordionContent>

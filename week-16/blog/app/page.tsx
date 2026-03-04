@@ -1,11 +1,11 @@
-import Navigation from "@/components/Navigation";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import HeroSection from "@/components/HeroSection"
 
 export default function Home() {
   return (
-    <div className="">
-      <Navigation/>
+    <div className="min-h-screen bg-background">
+      <main>
+        <HeroSection/>
+      </main>
     </div>
   );
 }

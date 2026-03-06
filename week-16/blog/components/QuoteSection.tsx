@@ -19,7 +19,7 @@ export default function QuoteSection(){
                     >
                     <div>
                         <Quote className="h-12 w-12 text-primary/30 mx-auto mb-6"/>
-                        <blockquote className="text-2xl md:text-3xl font-serif font-medium text-foreground leading-relaxed mb-6">"{randomQuote.text}"</blockquote>
+                        <blockquote className="text-2xl md:text-3xl font-serif font-medium text-foreground leading-relaxed mb-6">{`"${randomQuote.text}"`}</blockquote>
                         <cite className="text-lg text-foreground font-medium not-italic">- {randomQuote.author}</cite>
                     </div>
                 </motion.div>

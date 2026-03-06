@@ -91,7 +91,7 @@ export default function Footer(){
                     </div>
                 </div>
                 <div className="mt-12 pt-8 border-t border-border/50 text-center text-sm text-muted-foreground">
-                    <p>&copy {new Date().getFullYear()} Resonance. All right reserved.</p>
+                    <p>©copyright {new Date().getFullYear()} Resonance. All right reserved.</p>
                 </div>
             </div>
         </footer>
